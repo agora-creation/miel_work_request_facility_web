@@ -38,7 +38,7 @@ ThemeData customTheme() {
       systemOverlayStyle: SystemUiOverlayStyle.light,
       titleTextStyle: TextStyle(
         color: kWhiteColor,
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),

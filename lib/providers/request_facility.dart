@@ -10,29 +10,31 @@ class RequestFacilityProvider with ChangeNotifier {
   final FmService _fmService = FmService();
 
   Future<String?> create({
-    required String shopName,
-    required String shopUserName,
-    required String shopUserEmail,
-    required String shopUserTel,
-    required String usePeriod,
-    required String remarks,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required DateTime useStartedAt,
+    required DateTime useEndedAt,
+    required bool useAtPending,
   }) async {
     String? error;
-    if (shopName == '') return '店舗名は必須入力です';
-    if (shopUserName == '') return '店舗責任者名は必須入力です';
-    if (shopUserEmail == '') return '店舗責任者メールアドレスは必須入力です';
-    if (shopUserTel == '') return '店舗責任者電話番号は必須入力です';
+    if (companyName == '') return '店舗名は必須入力です';
+    if (companyUserName == '') return '店舗責任者名は必須入力です';
+    if (companyUserEmail == '') return '店舗責任者メールアドレスは必須入力です';
+    if (companyUserTel == '') return '店舗責任者電話番号は必須入力です';
     try {
       await FirebaseAuth.instance.signInAnonymously().then((value) {
         String id = _facilityService.id();
         _facilityService.create({
           'id': id,
-          'shopName': shopName,
-          'shopUserName': shopUserName,
-          'shopUserEmail': shopUserEmail,
-          'shopUserTel': shopUserTel,
-          'usePeriod': usePeriod,
-          'remarks': remarks,
+          'companyName': companyName,
+          'companyUserName': companyUserName,
+          'companyUserEmail': companyUserEmail,
+          'companyUserTel': companyUserTel,
+          'useStartedAt': useStartedAt,
+          'useEndedAt': useEndedAt,
+          'useAtPending': useAtPending,
           'approval': 0,
           'approvedAt': DateTime.now(),
           'approvalUsers': [],
@@ -47,7 +49,7 @@ class RequestFacilityProvider with ChangeNotifier {
       //     _fmService.send(
       //       token: user.token,
       //       title: '社外申請',
-      //       body: '施設使用の申込がありました',
+      //       body: 'よさこい広場使用の申込がありました',
       //     );
       //   }
       // }

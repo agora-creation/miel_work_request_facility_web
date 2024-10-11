@@ -13,20 +13,22 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class Step2Screen extends StatefulWidget {
-  final String shopName;
-  final String shopUserName;
-  final String shopUserEmail;
-  final String shopUserTel;
-  final String usePeriod;
-  final String remarks;
+  final String companyName;
+  final String companyUserName;
+  final String companyUserEmail;
+  final String companyUserTel;
+  final DateTime useStartedAt;
+  final DateTime useEndedAt;
+  final bool useAtPending;
 
   const Step2Screen({
-    required this.shopName,
-    required this.shopUserName,
-    required this.shopUserEmail,
-    required this.shopUserTel,
-    required this.usePeriod,
-    required this.remarks,
+    required this.companyName,
+    required this.companyUserName,
+    required this.companyUserEmail,
+    required this.companyUserTel,
+    required this.useStartedAt,
+    required this.useEndedAt,
+    required this.useAtPending,
     super.key,
   });
 
@@ -56,48 +58,56 @@ class _Step2ScreenState extends State<Step2Screen> {
               ResponsiveBox(
                 children: [
                   const Text('以下の申込内容で問題ないかご確認ください。'),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗名',
-                    child: FormValue(widget.shopName),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者名',
-                    child: FormValue(widget.shopUserName),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者メールアドレス',
-                    child: FormValue(widget.shopUserEmail),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者電話番号',
-                    child: FormValue(widget.shopUserTel),
-                  ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
                   const Text(
-                    '旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)',
+                    '申込者情報',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '使用期間',
-                    child: FormValue(widget.usePeriod),
+                    '申込会社名(又は店名)',
+                    child: FormValue(widget.companyName),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '申込担当者名',
+                    child: FormValue(widget.companyUserName),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '申込担当者メールアドレス',
+                    child: FormValue(widget.companyUserEmail),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '申込担当者電話番号',
+                    child: FormValue(widget.companyUserTel),
+                  ),
+                  const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
+                  const Text(
+                    '旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   FormLabel(
-                    'その他連絡事項',
-                    child: FormValue(widget.remarks),
+                    '使用予定日時',
+                    child: FormValue(
+                      widget.useAtPending
+                          ? '未定'
+                          : '${dateText('yyyy年MM月dd日 HH:mm', widget.useStartedAt)}〜${dateText('yyyy年MM月dd日 HH:mm', widget.useEndedAt)}',
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const DottedDivider(),
@@ -109,12 +119,13 @@ class _Step2ScreenState extends State<Step2Screen> {
                     backgroundColor: kBlueColor,
                     onPressed: () async {
                       String? error = await facilityProvider.create(
-                        shopName: widget.shopName,
-                        shopUserName: widget.shopUserName,
-                        shopUserEmail: widget.shopUserEmail,
-                        shopUserTel: widget.shopUserTel,
-                        usePeriod: widget.usePeriod,
-                        remarks: widget.remarks,
+                        companyName: widget.companyName,
+                        companyUserName: widget.companyUserName,
+                        companyUserEmail: widget.companyUserEmail,
+                        companyUserTel: widget.companyUserTel,
+                        useStartedAt: widget.useStartedAt,
+                        useEndedAt: widget.useEndedAt,
+                        useAtPending: widget.useAtPending,
                       );
                       if (error != null) {
                         if (!mounted) return;

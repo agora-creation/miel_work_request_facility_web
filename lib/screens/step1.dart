@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_request_facility_web/common/custom_date_time_picker.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
 import 'package:miel_work_request_facility_web/screens/step2.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_button.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_text_field.dart';
+import 'package:miel_work_request_facility_web/widgets/datetime_range_form.dart';
 import 'package:miel_work_request_facility_web/widgets/dotted_divider.dart';
 import 'package:miel_work_request_facility_web/widgets/form_label.dart';
 import 'package:miel_work_request_facility_web/widgets/responsive_box.dart';
@@ -16,12 +18,29 @@ class Step1Screen extends StatefulWidget {
 }
 
 class _Step1ScreenState extends State<Step1Screen> {
-  TextEditingController shopName = TextEditingController();
-  TextEditingController shopUserName = TextEditingController();
-  TextEditingController shopUserEmail = TextEditingController();
-  TextEditingController shopUserTel = TextEditingController();
-  TextEditingController usePeriod = TextEditingController();
-  TextEditingController remarks = TextEditingController();
+  TextEditingController companyName = TextEditingController();
+  TextEditingController companyUserName = TextEditingController();
+  TextEditingController companyUserEmail = TextEditingController();
+  TextEditingController companyUserTel = TextEditingController();
+  DateTime useStartedAt = DateTime.now();
+  DateTime useEndedAt = DateTime.now();
+  bool useAtPending = false;
+
+  @override
+  void initState() {
+    useStartedAt = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      10,
+      0,
+      0,
+    );
+    useEndedAt = useStartedAt.add(
+      const Duration(hours: 2),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +62,32 @@ class _Step1ScreenState extends State<Step1Screen> {
               ResponsiveBox(
                 children: [
                   const Text('以下のフォームにご入力いただき、申込を行なってください。'),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗名',
-                    child: CustomTextField(
-                      controller: shopName,
-                      textInputType: TextInputType.text,
-                      maxLines: 1,
-                      hintText: '例）黒潮水産',
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '申込者情報',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '店舗責任者名',
+                    '申込会社名(又は店名)',
                     child: CustomTextField(
-                      controller: shopUserName,
+                      controller: companyName,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                      hintText: '例）ひろめカンパニー',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '申込担当者名',
+                    child: CustomTextField(
+                      controller: companyUserName,
                       textInputType: TextInputType.text,
                       maxLines: 1,
                       hintText: '例）田中太郎',
@@ -65,9 +95,9 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '店舗責任者メールアドレス',
+                    '申込担当者メールアドレス',
                     child: CustomTextField(
-                      controller: shopUserEmail,
+                      controller: companyUserEmail,
                       textInputType: TextInputType.text,
                       maxLines: 1,
                       hintText: '例）tanaka@hirome.co.jp',
@@ -82,44 +112,59 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '店舗責任者電話番号',
+                    '申込担当者電話番号',
                     child: CustomTextField(
-                      controller: shopUserTel,
+                      controller: companyUserTel,
                       textInputType: TextInputType.text,
                       maxLines: 1,
                       hintText: '例）090-0000-0000',
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
                   const Text(
                     '旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '使用期間',
-                    child: CustomTextField(
-                      controller: usePeriod,
-                      textInputType: TextInputType.text,
-                      maxLines: 1,
-                      hintText: '例）令和元年9月20日〜9月27日',
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const DottedDivider(),
-                  const SizedBox(height: 16),
-                  FormLabel(
-                    'その他連絡事項',
-                    child: CustomTextField(
-                      controller: remarks,
-                      textInputType: TextInputType.multiline,
-                      maxLines: null,
+                    '使用予定日時',
+                    child: DatetimeRangeForm(
+                      startedAt: useStartedAt,
+                      startedOnTap: () async =>
+                          await CustomDateTimePicker().picker(
+                        context: context,
+                        init: useStartedAt,
+                        title: '使用予定開始日時を選択',
+                        onChanged: (value) {
+                          setState(() {
+                            useStartedAt = value;
+                          });
+                        },
+                      ),
+                      endedAt: useEndedAt,
+                      endedOnTap: () async =>
+                          await CustomDateTimePicker().picker(
+                        context: context,
+                        init: useEndedAt,
+                        title: '使用予定終了日時を選択',
+                        onChanged: (value) {
+                          setState(() {
+                            useEndedAt = value;
+                          });
+                        },
+                      ),
+                      pending: useAtPending,
+                      pendingOnChanged: (value) {
+                        setState(() {
+                          useAtPending = value ?? false;
+                        });
+                      },
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -136,12 +181,13 @@ class _Step1ScreenState extends State<Step1Screen> {
                         PageTransition(
                           type: PageTransitionType.rightToLeft,
                           child: Step2Screen(
-                            shopName: shopName.text,
-                            shopUserName: shopUserName.text,
-                            shopUserEmail: shopUserEmail.text,
-                            shopUserTel: shopUserTel.text,
-                            usePeriod: usePeriod.text,
-                            remarks: remarks.text,
+                            companyName: companyName.text,
+                            companyUserName: companyUserName.text,
+                            companyUserEmail: companyUserEmail.text,
+                            companyUserTel: companyUserTel.text,
+                            useStartedAt: useStartedAt,
+                            useEndedAt: useEndedAt,
+                            useAtPending: useAtPending,
                           ),
                         ),
                       );

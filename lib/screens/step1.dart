@@ -75,17 +75,17 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込会社名(又は店名)',
+                    '店舗名',
                     child: CustomTextField(
                       controller: companyName,
                       textInputType: TextInputType.text,
                       maxLines: 1,
-                      hintText: '例）ひろめカンパニー',
+                      hintText: '例）明神水産',
                     ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者名',
+                    '店舗責任者名',
                     child: CustomTextField(
                       controller: companyUserName,
                       textInputType: TextInputType.text,
@@ -95,7 +95,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者メールアドレス',
+                    '店舗責任者メールアドレス',
                     child: CustomTextField(
                       controller: companyUserEmail,
                       textInputType: TextInputType.text,
@@ -112,7 +112,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者電話番号',
+                    '店舗責任者電話番号',
                     child: CustomTextField(
                       controller: companyUserTel,
                       textInputType: TextInputType.text,
@@ -165,6 +165,13 @@ class _Step1ScreenState extends State<Step1Screen> {
                           useAtPending = value ?? false;
                         });
                       },
+                    ),
+                  ),
+                  const Text(
+                    '※使用料：1,200円(税抜)／1日',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 16),

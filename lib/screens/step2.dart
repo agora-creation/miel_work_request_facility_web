@@ -71,22 +71,22 @@ class _Step2ScreenState extends State<Step2Screen> {
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込会社名(又は店名)',
+                    '店舗名',
                     child: FormValue(widget.companyName),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者名',
+                    '店舗責任者名',
                     child: FormValue(widget.companyUserName),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者メールアドレス',
+                    '店舗責任者メールアドレス',
                     child: FormValue(widget.companyUserEmail),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '申込担当者電話番号',
+                    '店舗責任者電話番号',
                     child: FormValue(widget.companyUserTel),
                   ),
                   const SizedBox(height: 16),

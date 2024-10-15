@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_request_facility_web/common/custom_date_time_picker.dart';
+import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
+import 'package:miel_work_request_facility_web/providers/request_facility.dart';
 import 'package:miel_work_request_facility_web/screens/step2.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_button.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_text_field.dart';
@@ -9,6 +11,7 @@ import 'package:miel_work_request_facility_web/widgets/dotted_divider.dart';
 import 'package:miel_work_request_facility_web/widgets/form_label.dart';
 import 'package:miel_work_request_facility_web/widgets/responsive_box.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class Step1Screen extends StatefulWidget {
   const Step1Screen({super.key});
@@ -44,6 +47,7 @@ class _Step1ScreenState extends State<Step1Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final facilityProvider = Provider.of<RequestFacilityProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -76,6 +80,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   const SizedBox(height: 8),
                   FormLabel(
                     '店舗名',
+                    required: true,
                     child: CustomTextField(
                       controller: companyName,
                       textInputType: TextInputType.text,
@@ -86,6 +91,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   const SizedBox(height: 8),
                   FormLabel(
                     '店舗責任者名',
+                    required: true,
                     child: CustomTextField(
                       controller: companyUserName,
                       textInputType: TextInputType.text,
@@ -96,6 +102,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   const SizedBox(height: 8),
                   FormLabel(
                     '店舗責任者メールアドレス',
+                    required: true,
                     child: CustomTextField(
                       controller: companyUserEmail,
                       textInputType: TextInputType.text,
@@ -113,6 +120,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                   const SizedBox(height: 8),
                   FormLabel(
                     '店舗責任者電話番号',
+                    required: true,
                     child: CustomTextField(
                       controller: companyUserTel,
                       textInputType: TextInputType.text,
@@ -218,6 +226,18 @@ class _Step1ScreenState extends State<Step1Screen> {
                     labelColor: kWhiteColor,
                     backgroundColor: kBlueColor,
                     onPressed: () async {
+                      String? error = await facilityProvider.check(
+                        companyName: companyName.text,
+                        companyUserName: companyUserName.text,
+                        companyUserEmail: companyUserEmail.text,
+                        companyUserTel: companyUserTel.text,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                      if (!mounted) return;
                       Navigator.push(
                         context,
                         PageTransition(

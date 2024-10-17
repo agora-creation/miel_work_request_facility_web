@@ -42,7 +42,7 @@ class _Step2ScreenState extends State<Step2Screen> {
   Widget build(BuildContext context) {
     final facilityProvider = Provider.of<RequestFacilityProvider>(context);
     int useAtDaysPrice = 0;
-    if (widget.useAtPending) {
+    if (!widget.useAtPending) {
       int useAtDays = widget.useEndedAt.difference(widget.useStartedAt).inDays;
       int price = 1200;
       useAtDaysPrice = price * useAtDays;

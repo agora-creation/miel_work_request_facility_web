@@ -68,7 +68,7 @@ class RequestFacilityProvider with ChangeNotifier {
             '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
       }
       int useAtDaysPrice = 0;
-      if (useAtPending) {
+      if (!useAtPending) {
         int useAtDays = useEndedAt.difference(useStartedAt).inDays;
         int price = 1200;
         useAtDaysPrice = price * useAtDays;

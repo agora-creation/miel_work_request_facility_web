@@ -1,13 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/models/user.dart';
 import 'package:miel_work_request_facility_web/services/fm.dart';
+import 'package:miel_work_request_facility_web/services/mail.dart';
 import 'package:miel_work_request_facility_web/services/request_facility.dart';
 import 'package:miel_work_request_facility_web/services/user.dart';
 
 class RequestFacilityProvider with ChangeNotifier {
   final RequestFacilityService _facilityService = RequestFacilityService();
   final UserService _userService = UserService();
+  final MailService _mailService = MailService();
   final FmService _fmService = FmService();
 
   Future<String?> check({
@@ -55,6 +59,45 @@ class RequestFacilityProvider with ChangeNotifier {
           'approvalUsers': [],
           'createdAt': DateTime.now(),
         });
+      });
+      String useAtText = '';
+      if (useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
+      }
+      int useAtDaysPrice = 0;
+      if (useAtPending) {
+        int useAtDays = useEndedAt.difference(useStartedAt).inDays;
+        int price = 1200;
+        useAtDaysPrice = price * useAtDays;
+      }
+      String message = '''
+★★★このメールは自動返信メールです★★★
+
+施設使用申込が完了いたしました。
+以下申込内容を確認し、ご返信させていただきますので今暫くお待ちください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【店舗名】$companyName
+【店舗責任者名】$companyUserName
+【店舗責任者メールアドレス】$companyUserEmail
+【店舗責任者電話番号】$companyUserTel
+
+■旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)
+【使用予定日時】$useAtText
+【使用料合計(税抜)】${NumberFormat("#,###").format(useAtDaysPrice)}円
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      ''';
+      _mailService.create({
+        'id': _mailService.id(),
+        'to': companyUserEmail,
+        'subject': '【自動送信】施設使用申込完了のお知らせ',
+        'message': message,
+        'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
       });
       //通知
       List<UserModel> sendUsers = [];

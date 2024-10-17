@@ -38,16 +38,16 @@ ThemeData customTheme() {
       systemOverlayStyle: SystemUiOverlayStyle.light,
       titleTextStyle: TextStyle(
         color: kWhiteColor,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),
       iconTheme: IconThemeData(color: kWhiteColor),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: kBlackColor),
-      bodyMedium: TextStyle(color: kBlackColor),
-      bodySmall: TextStyle(color: kBlackColor),
+      bodyLarge: TextStyle(color: kBlackColor, fontSize: 14),
+      bodyMedium: TextStyle(color: kBlackColor, fontSize: 14),
+      bodySmall: TextStyle(color: kBlackColor, fontSize: 14),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: kWhiteColor,

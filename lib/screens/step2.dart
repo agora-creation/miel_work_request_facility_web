@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
 import 'package:miel_work_request_facility_web/providers/request_facility.dart';
@@ -40,6 +41,12 @@ class _Step2ScreenState extends State<Step2Screen> {
   @override
   Widget build(BuildContext context) {
     final facilityProvider = Provider.of<RequestFacilityProvider>(context);
+    int useAtDaysPrice = 0;
+    if (widget.useAtPending) {
+      int useAtDays = widget.useEndedAt.difference(widget.useStartedAt).inDays;
+      int price = 1200;
+      useAtDaysPrice = price * useAtDays;
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -107,6 +114,13 @@ class _Step2ScreenState extends State<Step2Screen> {
                       widget.useAtPending
                           ? '未定'
                           : '${dateText('yyyy年MM月dd日 HH:mm', widget.useStartedAt)}〜${dateText('yyyy年MM月dd日 HH:mm', widget.useEndedAt)}',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '使用料合計(税抜)',
+                    child: FormValue(
+                      '${NumberFormat("#,###").format(useAtDaysPrice)}円',
                     ),
                   ),
                   const SizedBox(height: 16),

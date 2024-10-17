@@ -122,7 +122,8 @@ class _Step1ScreenState extends State<Step1Screen> {
                     '※このメールアドレス宛に、返答させていただきます',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -195,42 +196,48 @@ class _Step1ScreenState extends State<Step1Screen> {
                     '※使用料：1,200円(税抜)／1日',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const Text(
                     '※使用期間中は、旧梵屋跡の内側および外側のシャッターの鍵をお渡しいたします。貴店で厳重な管理をお願いします。また使用終了後は直ちにインフォメーションまで返却してください。',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const Text(
                     '※使用料につきましては、使用終了後、速やかにインフォメーションにてお支払いください。',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const Text(
                     '※使用後は、清掃をお願いします。',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const Text(
                     '※使用期間中、既に置いてあった商品などの損害については責任を負いかねますのでご了承ください。',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const Text(
                     '※使用期間中、鍵を紛失したり、貴店の責により損害を与え修理などが必要となった場合には、修理費用実費をご請求させていただきます。',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 16),

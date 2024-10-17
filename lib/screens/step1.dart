@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_request_facility_web/common/custom_date_time_picker.dart';
@@ -5,6 +6,7 @@ import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
 import 'package:miel_work_request_facility_web/providers/request_facility.dart';
 import 'package:miel_work_request_facility_web/screens/step2.dart';
+import 'package:miel_work_request_facility_web/widgets/attached_file_list.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_button.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_text_field.dart';
 import 'package:miel_work_request_facility_web/widgets/datetime_range_form.dart';
@@ -13,6 +15,7 @@ import 'package:miel_work_request_facility_web/widgets/form_label.dart';
 import 'package:miel_work_request_facility_web/widgets/form_value.dart';
 import 'package:miel_work_request_facility_web/widgets/responsive_box.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class Step1Screen extends StatefulWidget {
@@ -30,6 +33,7 @@ class _Step1ScreenState extends State<Step1Screen> {
   DateTime useStartedAt = DateTime.now();
   DateTime useEndedAt = DateTime.now();
   bool useAtPending = false;
+  List<PlatformFile> pickedAttachedFiles = [];
 
   @override
   void initState() {
@@ -242,6 +246,44 @@ class _Step1ScreenState extends State<Step1Screen> {
                   ),
                   const SizedBox(height: 16),
                   const DottedDivider(),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '添付ファイル',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: 'ファイル選択',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kGreyColor,
+                          onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(
+                              type: FileType.any,
+                            );
+                            if (result == null) return;
+                            pickedAttachedFiles.addAll(result.files);
+                            setState(() {});
+                          },
+                        ),
+                        const SizedBox(height: 4),
+                        Column(
+                          children: pickedAttachedFiles.map((file) {
+                            return AttachedFileList(
+                              fileName: p.basename(file.name),
+                              onTap: () {
+                                pickedAttachedFiles.remove(file);
+                                setState(() {});
+                              },
+                              isClose: true,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
                   const SizedBox(height: 32),
                   CustomButton(
                     type: ButtonSizeType.lg,
@@ -273,6 +315,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                             useStartedAt: useStartedAt,
                             useEndedAt: useEndedAt,
                             useAtPending: useAtPending,
+                            pickedAttachedFiles: pickedAttachedFiles,
                           ),
                         ),
                       );

@@ -1,9 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
 import 'package:miel_work_request_facility_web/providers/request_facility.dart';
 import 'package:miel_work_request_facility_web/screens/step3.dart';
+import 'package:miel_work_request_facility_web/widgets/attached_file_list.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_button.dart';
 import 'package:miel_work_request_facility_web/widgets/dotted_divider.dart';
 import 'package:miel_work_request_facility_web/widgets/form_label.dart';
@@ -11,6 +13,7 @@ import 'package:miel_work_request_facility_web/widgets/form_value.dart';
 import 'package:miel_work_request_facility_web/widgets/link_text.dart';
 import 'package:miel_work_request_facility_web/widgets/responsive_box.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class Step2Screen extends StatefulWidget {
@@ -21,6 +24,7 @@ class Step2Screen extends StatefulWidget {
   final DateTime useStartedAt;
   final DateTime useEndedAt;
   final bool useAtPending;
+  final List<PlatformFile> pickedAttachedFiles;
 
   const Step2Screen({
     required this.companyName,
@@ -30,6 +34,7 @@ class Step2Screen extends StatefulWidget {
     required this.useStartedAt,
     required this.useEndedAt,
     required this.useAtPending,
+    required this.pickedAttachedFiles,
     super.key,
   });
 
@@ -125,6 +130,24 @@ class _Step2ScreenState extends State<Step2Screen> {
                   ),
                   const SizedBox(height: 16),
                   const DottedDivider(),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '添付ファイル',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: widget.pickedAttachedFiles.map((file) {
+                            return AttachedFileList(
+                              fileName: p.basename(file.name),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
                   const SizedBox(height: 32),
                   CustomButton(
                     type: ButtonSizeType.lg,
@@ -140,6 +163,7 @@ class _Step2ScreenState extends State<Step2Screen> {
                         useStartedAt: widget.useStartedAt,
                         useEndedAt: widget.useEndedAt,
                         useAtPending: widget.useAtPending,
+                        pickedAttachedFiles: widget.pickedAttachedFiles,
                       );
                       if (error != null) {
                         if (!mounted) return;

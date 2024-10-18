@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:miel_work_request_facility_web/common/custom_date_time_picker.dart';
 import 'package:miel_work_request_facility_web/common/functions.dart';
 import 'package:miel_work_request_facility_web/common/style.dart';
+import 'package:miel_work_request_facility_web/models/request_facility.dart';
 import 'package:miel_work_request_facility_web/providers/request_facility.dart';
 import 'package:miel_work_request_facility_web/screens/step2.dart';
+import 'package:miel_work_request_facility_web/services/request_facility.dart';
 import 'package:miel_work_request_facility_web/widgets/attached_file_list.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_button.dart';
 import 'package:miel_work_request_facility_web/widgets/custom_text_field.dart';
@@ -26,6 +28,7 @@ class Step1Screen extends StatefulWidget {
 }
 
 class _Step1ScreenState extends State<Step1Screen> {
+  RequestFacilityService facilityService = RequestFacilityService();
   TextEditingController companyName = TextEditingController();
   TextEditingController companyUserName = TextEditingController();
   TextEditingController companyUserEmail = TextEditingController();
@@ -34,6 +37,21 @@ class _Step1ScreenState extends State<Step1Screen> {
   DateTime useEndedAt = DateTime.now();
   bool useAtPending = false;
   List<PlatformFile> pickedAttachedFiles = [];
+
+  void _getPrm() async {
+    String? id = Uri.base.queryParameters['id'];
+    if (id == null) return;
+    RequestFacilityModel? facility = await facilityService.selectData(id);
+    if (facility == null) return;
+    companyName.text = facility.companyName;
+    companyUserName.text = facility.companyUserName;
+    companyUserEmail.text = facility.companyUserEmail;
+    companyUserTel.text = facility.companyUserTel;
+    useStartedAt = facility.useStartedAt;
+    useEndedAt = facility.useEndedAt;
+    useAtPending = facility.useAtPending;
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -48,6 +66,7 @@ class _Step1ScreenState extends State<Step1Screen> {
     useEndedAt = useStartedAt.add(
       const Duration(days: 7, hours: 2),
     );
+    _getPrm();
     super.initState();
   }
 

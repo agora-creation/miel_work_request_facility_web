@@ -80,21 +80,26 @@ class RequestFacilityProvider with ChangeNotifier {
           'approvalUsers': [],
           'createdAt': DateTime.now(),
         });
-      });
-      String useAtText = '';
-      if (useAtPending) {
-        useAtText = '未定';
-      } else {
-        useAtText =
-            '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
-      }
-      int useAtDaysPrice = 0;
-      if (!useAtPending) {
-        int useAtDays = useEndedAt.difference(useStartedAt).inDays;
-        int price = 1200;
-        useAtDaysPrice = price * useAtDays;
-      }
-      String message = '''
+        String useAtText = '';
+        if (useAtPending) {
+          useAtText = '未定';
+        } else {
+          useAtText =
+              '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
+        }
+        int useAtDaysPrice = 0;
+        if (!useAtPending) {
+          int useAtDays = useEndedAt.difference(useStartedAt).inDays;
+          int price = 1200;
+          useAtDaysPrice = price * useAtDays;
+        }
+        String attachedFilesText = '';
+        if (attachedFiles.isNotEmpty) {
+          for (final file in attachedFiles) {
+            attachedFilesText += '$file\n';
+          }
+        }
+        String message = '''
 ★★★このメールは自動返信メールです★★★
 
 施設使用申込が完了いたしました。
@@ -110,15 +115,19 @@ class RequestFacilityProvider with ChangeNotifier {
 【使用予定日時】$useAtText
 【使用料合計(税抜)】${NumberFormat("#,###").format(useAtDaysPrice)}円
 
+【添付ファイル】
+$attachedFilesText
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
-      _mailService.create({
-        'id': _mailService.id(),
-        'to': companyUserEmail,
-        'subject': '【自動送信】施設使用申込完了のお知らせ',
-        'message': message,
-        'createdAt': DateTime.now(),
-        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+        _mailService.create({
+          'id': _mailService.id(),
+          'to': companyUserEmail,
+          'subject': '【自動送信】施設使用申込完了のお知らせ',
+          'message': message,
+          'createdAt': DateTime.now(),
+          'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+        });
       });
       //通知
       List<UserModel> sendUsers = [];

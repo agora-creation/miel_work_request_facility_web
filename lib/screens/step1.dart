@@ -33,6 +33,7 @@ class _Step1ScreenState extends State<Step1Screen> {
   TextEditingController companyUserName = TextEditingController();
   TextEditingController companyUserEmail = TextEditingController();
   TextEditingController companyUserTel = TextEditingController();
+  PlatformFile? pickedUseLocationFile;
   DateTime useStartedAt = DateTime.now();
   DateTime useEndedAt = DateTime.now();
   bool useAtPending = false;
@@ -169,6 +170,32 @@ class _Step1ScreenState extends State<Step1Screen> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '使用場所を記したPDFファイル',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: 'ファイル選択',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kGreyColor,
+                          onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['pdf'],
+                              withData: true,
+                            );
+                            if (result == null) return;
+                            setState(() {
+                              pickedUseLocationFile = result.files.first;
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -331,6 +358,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                             companyUserName: companyUserName.text,
                             companyUserEmail: companyUserEmail.text,
                             companyUserTel: companyUserTel.text,
+                            pickedUseLocationFile: pickedUseLocationFile,
                             useStartedAt: useStartedAt,
                             useEndedAt: useEndedAt,
                             useAtPending: useAtPending,

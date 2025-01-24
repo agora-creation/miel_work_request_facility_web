@@ -36,6 +36,7 @@ class RequestFacilityProvider with ChangeNotifier {
     required String companyUserName,
     required String companyUserEmail,
     required String companyUserTel,
+    required PlatformFile? pickedUseLocationFile,
     required DateTime useStartedAt,
     required DateTime useEndedAt,
     required bool useAtPending,
@@ -49,6 +50,17 @@ class RequestFacilityProvider with ChangeNotifier {
     try {
       await FirebaseAuth.instance.signInAnonymously().then((value) async {
         String id = _facilityService.id();
+        String useLocationFile = '';
+        if (pickedUseLocationFile != null) {
+          storage.UploadTask uploadTask;
+          storage.Reference ref = storage.FirebaseStorage.instance
+              .ref()
+              .child('requestInterview')
+              .child('/${id}_location.pdf');
+          uploadTask = ref.putData(pickedUseLocationFile.bytes!);
+          await uploadTask.whenComplete(() => null);
+          useLocationFile = await ref.getDownloadURL();
+        }
         List<String> attachedFiles = [];
         if (pickedAttachedFiles.isNotEmpty) {
           int i = 0;
@@ -71,6 +83,7 @@ class RequestFacilityProvider with ChangeNotifier {
           'companyUserName': companyUserName,
           'companyUserEmail': companyUserEmail,
           'companyUserTel': companyUserTel,
+          'useLocationFile': useLocationFile,
           'useStartedAt': useStartedAt,
           'useEndedAt': useEndedAt,
           'useAtPending': useAtPending,
@@ -112,6 +125,7 @@ class RequestFacilityProvider with ChangeNotifier {
 【店舗責任者電話番号】$companyUserTel
 
 ■旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)
+【使用場所を記したPDFファイル】$useLocationFile
 【使用予定日時】$useAtText
 【使用料合計(税抜)】${NumberFormat("#,###").format(useAtDaysPrice)}円
 

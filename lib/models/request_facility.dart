@@ -7,6 +7,7 @@ class RequestFacilityModel {
   String _companyUserName = '';
   String _companyUserEmail = '';
   String _companyUserTel = '';
+  String _useLocationFile = '';
   DateTime _useStartedAt = DateTime.now();
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
@@ -22,6 +23,7 @@ class RequestFacilityModel {
   String get companyUserName => _companyUserName;
   String get companyUserEmail => _companyUserEmail;
   String get companyUserTel => _companyUserTel;
+  String get useLocationFile => _useLocationFile;
   DateTime get useStartedAt => _useStartedAt;
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
@@ -39,6 +41,7 @@ class RequestFacilityModel {
     _companyUserName = data['companyUserName'] ?? '';
     _companyUserEmail = data['companyUserEmail'] ?? '';
     _companyUserTel = data['companyUserTel'] ?? '';
+    _useLocationFile = data['useLocationFile'] ?? '';
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;

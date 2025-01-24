@@ -55,7 +55,7 @@ class RequestFacilityProvider with ChangeNotifier {
           storage.UploadTask uploadTask;
           storage.Reference ref = storage.FirebaseStorage.instance
               .ref()
-              .child('requestInterview')
+              .child('requestFacility')
               .child('/${id}_location.pdf');
           uploadTask = ref.putData(pickedUseLocationFile.bytes!);
           await uploadTask.whenComplete(() => null);
@@ -69,7 +69,7 @@ class RequestFacilityProvider with ChangeNotifier {
             storage.UploadTask uploadTask;
             storage.Reference ref = storage.FirebaseStorage.instance
                 .ref()
-                .child('requestInterview')
+                .child('requestFacility')
                 .child('/${id}_$i$ext');
             uploadTask = ref.putData(file.bytes!);
             await uploadTask.whenComplete(() => null);
